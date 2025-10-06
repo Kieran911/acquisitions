@@ -1,0 +1,5 @@
+{"level":"info","message":"::1 - - [06/Oct/2025:14:59:02 +0000] \"GET /sw.js HTTP/1.1\" 404 144 \"http://localhost:3000/sw.js\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36\"","service":"acquisitions-api"}
+{"level":"info","message":"Hello from Acquisitions!","service":"acquisitions-api"}
+{"level":"info","message":"::1 - - [06/Oct/2025:14:59:04 +0000] \"GET / HTTP/1.1\" 200 30 \"-\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36\"","service":"acquisitions-api"}
+{"level":"info","message":"::1 - - [06/Oct/2025:14:59:06 +0000] \"GET /sw.js HTTP/1.1\" 404 144 \"http://localhost:3000/sw.js\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36\"","service":"acquisitions-api"}
+{"level":"info","message":"::1 - - [06/Oct/2025:14:59:35 +0000] \"GET /sw.js HTTP/1.1\" 404 144 \"http://localhost:3000/sw.js\" \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36\"","service":"acquisitions-api"}
