@@ -7,7 +7,7 @@ const JWT_EXPIRES_IN = '1d';
 export const jwttoken = {
     sign: (payload, options = {}) => {
         try {
-           return jwt.sign(payload, JWT_SECRET, { algorithm: 'HS256', expiresIn: JWT_EXPIRES_IN, ...options });
+            return jwt.sign(payload, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN, ...options });
         } catch (error) {
             logger.error('Failed to sign token', error);
             throw new Error('Failed to sign token');
@@ -15,7 +15,7 @@ export const jwttoken = {
     },
     verify: (token, options = {}) => {
         try {
-            return jwt.verify(token, JWT_SECRET, { algorithms: ['HS256'], ...options });
+            return jwt.verify(token, JWT_SECRET, options);
         } catch (error) {
             logger.error('Failed to verify token', error);
             throw new Error('Failed to verify token');
