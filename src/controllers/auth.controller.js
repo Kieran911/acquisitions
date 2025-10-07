@@ -22,7 +22,7 @@ export const signup = async (req, res, next) => {
 
         const token =  jwttoken.sign({id: user.id, email:user.email, role: user.role});
 
-        cookies.set(res, 'token', token)
+        cookies.set(res, 'token', token, { maxAge: 24 * 60 * 60 * 1000 })
 
         logger.info(`User registered successfully: ${email}`);
         res.status(201).json({
