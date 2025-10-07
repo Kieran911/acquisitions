@@ -52,3 +52,6 @@
 {"level":"info","message":"User adminwin@ema.com created successfully","service":"acquisitions-api"}
 {"level":"info","message":"User registered successfully: adminwin@ema.com","service":"acquisitions-api"}
 {"level":"info","message":"::1 - - [07/Oct/2025:12:23:41 +0000] \"POST /api/auth/sign-up HTTP/1.1\" 201 104 \"-\" \"PostmanRuntime/7.43.3\"","service":"acquisitions-api"}
+{"level":"info","message":"User adminwin@emai.com created successfully","service":"acquisitions-api"}
+{"level":"info","message":"User registered successfully: adminwin@emai.com","service":"acquisitions-api"}
+{"level":"info","message":"::1 - - [07/Oct/2025:12:33:22 +0000] \"POST /api/auth/sign-up HTTP/1.1\" 201 105 \"-\" \"PostmanRuntime/7.43.3\"","service":"acquisitions-api"}
