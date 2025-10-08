@@ -12,7 +12,6 @@ services:
     volumes:
       # Persist branch metadata per git branch (optional)
       - ./.neon_local/:/tmp/.neon_local
-      - ./.git/HEAD:/tmp/.git/HEAD:ro,consistent
     healthcheck:
       test: ["CMD", "pg_isready", "-h", "localhost", "-p", "5432", "-U", "neon"]
       interval: 5s
