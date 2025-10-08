@@ -1,7 +1,7 @@
-import { db } from "#config/database.js";
-import logger from "#config/logger.js";
-import { users } from "#models/user.model.js";
-import { eq } from "drizzle-orm";
+import { db } from '#config/database.js';
+import logger from '#config/logger.js';
+import { users } from '#models/user.model.js';
+import { eq } from 'drizzle-orm';
 
 const userSelection = {
   id: users.id,
@@ -16,7 +16,7 @@ export const getAllUsers = async () => {
   try {
     return await db.select(userSelection).from(users);
   } catch (error) {
-    logger.error("Error getting users", error);
+    logger.error('Error getting users', error);
     throw error;
   }
 };
@@ -41,7 +41,7 @@ export const updateUser = async (id, updates) => {
     const user = await getUserById(id);
 
     if (!user) {
-      throw new Error("User not found");
+      throw new Error('User not found');
     }
 
     const updatePayload = { ...updates, updated_at: new Date() };
@@ -67,7 +67,7 @@ export const deleteUser = async (id) => {
       .returning(userSelection);
 
     if (!deletedUser) {
-      throw new Error("User not found");
+      throw new Error('User not found');
     }
 
     return deletedUser;
