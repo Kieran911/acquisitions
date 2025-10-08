@@ -16,11 +16,11 @@ export const securityMiddleware = async (req, res, next) => {
             break;
             case 'user': 
                 limit= 10
-                message= 'Admin request limit exceeded (10 per minute), Slow down.'
+                message= 'User request limit exceeded (10 per minute), Slow down.'
             break;
             case 'guest': 
                 limit= 5
-                message= 'Admin request limit exceeded (5 per minute), Slow down.'
+                message= 'Guest request limit exceeded (5 per minute), Slow down.'
             break;
         }
 
