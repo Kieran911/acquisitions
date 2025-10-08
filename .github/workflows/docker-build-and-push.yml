@@ -19,10 +19,25 @@ jobs:
   build-and-push:
     name: Build and Push Docker Image
     runs-on: ubuntu-latest
+    env:
+      CUSTOM_TAG: ""
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
+      - name: Generate production timestamp tag
+        id: timestamp
+        run: |
+          echo "prod_tag=prod-$(date -u '+%Y%m%d-%H%M%S')" >> "$GITHUB_OUTPUT"
+          echo "created=$(date -u +'%Y-%m-%dT%H:%M:%SZ')" >> "$GITHUB_OUTPUT"
+
+      - name: Compute optional suffix
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.tag_suffix != '' }}
+        run: echo "CUSTOM_TAG=${{ github.ref_name }}-${{ inputs.tag_suffix }}" >> "$GITHUB_ENV"
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -43,21 +58,16 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
-            # Branch-based tags
             type=ref,event=branch
-            # SHA-based tags
-            type=sha,prefix={{branch}}-,format=short
-            # Latest tag for main branch
-            type=raw,value=latest,enable={{is_default_branch}}
-            # Production timestamp tag
-            type=raw,value=prod-{{date 'YYYYMMDD-HHmmss'}},enable={{is_default_branch}}
-            # Custom suffix if provided
-            type=raw,value={{branch}}${{ inputs.tag_suffix && format('-{0}', inputs.tag_suffix) || '' }},enable=${{ inputs.tag_suffix != '' }}
+            type=sha,format=short,prefix=sha-
+            type=raw,value=latest,enable=${{ github.ref == 'refs/heads/main' }}
+            type=raw,value=${{ steps.timestamp.outputs.prod_tag }},enable=${{ github.ref == 'refs/heads/main' }}
+            type=raw,value=${{ env.CUSTOM_TAG }},enable=${{ env.CUSTOM_TAG != '' }}
           labels: |
             org.opencontainers.image.title=Acquisitions API
             org.opencontainers.image.description=Node.js Express API for acquisitions system
             org.opencontainers.image.vendor=Adrian Hajdin
-            org.opencontainers.image.created={{date 'YYYY-MM-DDTHH:mm:ssZ'}}
+            org.opencontainers.image.created=${{ steps.timestamp.outputs.created }}
 
       - name: Build and push Docker image
         id: build
@@ -72,7 +82,7 @@ jobs:
           cache-to: type=gha,mode=max
           build-args: |
             NODE_ENV=production
-            BUILD_DATE={{date 'YYYY-MM-DDTHH:mm:ssZ'}}
+            BUILD_DATE=${{ steps.timestamp.outputs.created }}
             GIT_SHA=${{ github.sha }}
             GIT_REF=${{ github.ref_name }}
 
@@ -85,9 +95,11 @@ jobs:
           echo "**Image:** \`${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}\`" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "### Tags Published" >> $GITHUB_STEP_SUMMARY
-          echo '```' >> $GITHUB_STEP_SUMMARY
-          echo '${{ steps.meta.outputs.tags }}' >> $GITHUB_STEP_SUMMARY
-          echo '```' >> $GITHUB_STEP_SUMMARY
+          while IFS= read -r tag; do
+            if [ -n "$tag" ]; then
+              echo "- $tag" >> $GITHUB_STEP_SUMMARY
+            fi
+          done <<< "${{ steps.meta.outputs.tags }}"
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "### Build Details" >> $GITHUB_STEP_SUMMARY
           echo "- **Platforms:** linux/amd64, linux/arm64" >> $GITHUB_STEP_SUMMARY
